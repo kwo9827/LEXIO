@@ -152,3 +152,20 @@ export async function setTurnStart(roomCode: string) {
     turnStartAt: Date.now(),
   });
 }
+
+// 타일 제출하면 삭제
+export async function removeTilesFromHand(roomCode: string, playerId: string, tilesToRemove: string[]) {
+  const roomRef = ref(db, `rooms/${roomCode}`);
+  const snapshot = await get(roomRef);
+  if (!snapshot.exists()) return;
+
+  const roomData = snapshot.val();
+  const hand: string[] = roomData.players[playerId]?.hand || [];
+
+  // 타일 제거
+  const newHand = hand.filter((tile: string) => !tilesToRemove.includes(tile));
+
+  await update(roomRef, {
+    [`players/${playerId}/hand`]: newHand,
+  });
+}

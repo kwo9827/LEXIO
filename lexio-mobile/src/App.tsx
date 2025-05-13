@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import LobbyPage from "./pages/LobbyPage";
-import GameRoomPage from "./pages/GameRoomPage";
 import ResultPage from "./pages/ResultPage";
+import GameRoomPage from "./pages/GameRoomPage";
 
 function App() {
   return (

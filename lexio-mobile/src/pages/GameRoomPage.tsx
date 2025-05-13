@@ -1,9 +1,11 @@
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { onRoomUpdate, submitTiles, setNextTurn, dealTiles } from "../lib/roomAPI";
+import { onRoomUpdate, submitTiles, setNextTurn, dealTiles, comparecombo, removeTilesFromHand } from "../lib/roomAPI";
 import type { Player } from "../lib/roomAPI";
 import { getTileImagePath } from "../utils/tileImage";
 import { setPhase as updatePhase } from "../lib/roomAPI";
+import { validateTiles } from "../utils/validateTiles";
+import { RecommendationPanel } from "../components/RecommendationPanel";
 
 function GameRoomPage() {
   const { roomId } = useParams();
@@ -23,6 +25,8 @@ function GameRoomPage() {
   const [turnStartAt, setTurnStartAt] = useState(0);
   const [timeLeft, setTimeLeft] = useState(15);
 
+  const [currentCombo, setCurrentCombo] = useState<string | null>(null);
+
   // 내 턴인지 확인하기
   const isMyTurn = turn === playerId && phase === "playing";
 
@@ -31,14 +35,32 @@ function GameRoomPage() {
   };
 
   const handleSubmit = async () => {
+    const prevType = validateTiles(playedTiles);
+    const myType = validateTiles(selectedTiles);
+
     if (!roomId || selectedTiles.length === 0) return;
 
+    const combination = validateTiles(selectedTiles);
+    if (!combination) {
+      alert("❌ 유효하지 않은 조합입니다. 다시 선택해주세요.");
+      return;
+    }
+
+    if (prevType && myType && prevType === myType) {
+      const isStronger = compareCombo(selectedTiles, playedTiles) > 0;
+      if (!isStronger) {
+        alert("이전보다 강한 조합만 낼 수 있습니다.");
+        return;
+      }
+    }
+
     await submitTiles(roomId, selectedTiles); // 타일 제출
+    await removeTilesFromHand(roomId, playerId, selectedTiles); // 🔥 추가된 줄
     await setNextTurn(roomId, playerId, Object.keys(players)); // 🔁 턴 넘김
 
     setMyTiles((prev) => prev.filter((tile) => !selectedTiles.includes(tile)));
     setSelectedTiles([]);
-    setTimeLeft(15); // ✅ 이 줄 추가!
+    setTimeLeft(15);
   };
 
   const handlePass = async () => {
@@ -96,6 +118,16 @@ function GameRoomPage() {
     return () => clearInterval(interval);
   }, [turnStartAt, isMyTurn]);
 
+  useEffect(() => {
+    if (selectedTiles.length === 0) {
+      setCurrentCombo(null);
+      return;
+    }
+
+    const result = validateTiles(selectedTiles);
+    setCurrentCombo(result);
+  }, [selectedTiles]);
+
   return (
     <div className="min-h-screen bg-white flex flex-col p-4">
       {/* 상단 */}
@@ -110,9 +142,6 @@ function GameRoomPage() {
 
       {/* 플레이어 정보 */}
       <div className="text-center font-bold text-xl mb-2">{nickname}님의 게임방</div>
-      <div className="text-center text-sm text-gray-600 mb-4">
-        현재 턴: <b>{turn}</b>
-      </div>
 
       {/* 플레이어 목록 */}
       <div className="mb-4 text-sm text-gray-800">
@@ -124,6 +153,20 @@ function GameRoomPage() {
             </li>
           ))}
         </ul>
+      </div>
+
+      {/* 턴 순서 UI */}
+      <div className="flex justify-center gap-3 mb-4">
+        {Object.entries(players).map(([id, player]) => (
+          <div
+            key={id}
+            className={`px-3 py-1 rounded-full border text-sm ${
+              turn === id ? "bg-green-200 font-bold animate-pulse" : "bg-gray-100"
+            }`}
+          >
+            {player.nickname} {id === playerId && "(나)"}
+          </div>
+        ))}
       </div>
 
       <div className="text-center text-sm text-red-500 mb-2">{isMyTurn ? `남은 시간: ${timeLeft}초` : ""}</div>
@@ -192,6 +235,22 @@ function GameRoomPage() {
           </button>
         </div>
       )}
+
+      {selectedTiles.length > 0 && (
+        <div className="text-center text-sm mb-4">
+          {currentCombo ? (
+            <span className="text-green-600 font-semibold">✅ 현재 선택한 조합: {currentCombo}</span>
+          ) : (
+            <span className="text-red-500 font-semibold">❌ 유효하지 않은 조합입니다</span>
+          )}
+        </div>
+      )}
+
+      <RecommendationPanel
+        myTiles={myTiles}
+        onSelect={setSelectedTiles}
+        requiredType={validateTiles(playedTiles)} // 🔧 현재 플레이 조합의 타입
+      />
     </div>
   );
 }
