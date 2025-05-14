@@ -137,10 +137,19 @@ export async function setNextTurn(
 }
 
 function filterTilesByPlayerCount(allTiles: string[], count: number): string[] {
-  if (count === 5) return allTiles;
-  if (count === 4) return allTiles.filter((tile) => parseInt(tile.match(/\d+$/)?.[0] || "0") <= 12);
-  if (count === 3) return allTiles.filter((tile) => parseInt(tile.match(/\d+$/)?.[0] || "0") <= 9);
-  return [];
+  const validNumbers =
+    count === 5
+      ? Array.from({ length: 15 }, (_, i) => i + 1) // 1~15
+      : count === 4
+      ? Array.from({ length: 12 }, (_, i) => i + 1) // 1~12
+      : count === 3
+      ? Array.from({ length: 9 }, (_, i) => i + 1) // 1~9
+      : [];
+
+  return allTiles.filter((tile) => {
+    const num = parseInt(tile.match(/\d+/)?.[0] || "0", 10);
+    return validNumbers.includes(num);
+  });
 }
 
 export async function dealTiles(roomCode: string) {
@@ -157,22 +166,21 @@ export async function dealTiles(roomCode: string) {
   let allTiles = shuffleArray(generateAllTiles());
   allTiles = filterTilesByPlayerCount(allTiles, playerCount);
 
-  const updatedPlayers: Record<string, Player> = {};
-  let cloud3Owner: string | null = null;
-
-  const tilesPerPlayer = 13;
-  const totalNeeded = tilesPerPlayer * playerIds.length;
-  if (allTiles.length < totalNeeded) {
-    console.warn("타일이 부족합니다. 인원을 확인해주세요.");
+  const TILE_PER_PLAYER = 12;
+  if (playerCount * TILE_PER_PLAYER > allTiles.length) {
+    console.error("타일이 부족합니다. 인원을 확인해주세요.");
     return;
   }
 
+  const updatedPlayers: Record<string, Player> = {};
+  let cloud3Owner: string | null = null;
+
   playerIds.forEach((id, index) => {
-    const start = index * tilesPerPlayer;
-    const end = start + tilesPerPlayer;
+    const start = index * TILE_PER_PLAYER;
+    const end = start + TILE_PER_PLAYER;
     const hand = allTiles.slice(start, end);
 
-    if (hand.includes("구름3")) {
+    if (hand.includes("cloud3")) {
       cloud3Owner = id;
     }
 

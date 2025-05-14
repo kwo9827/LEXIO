@@ -1,15 +1,13 @@
 const shapes = ["cloud", "sun", "moon", "star"];
-const numbers = Array.from({ length: 15 }, (_, i) => i + 1);
+const numbers = Array.from({ length: 15 }, (_, i) => i + 1); // 1 ~ 15
 
 export function generateAllTiles(): string[] {
   const tiles: string[] = [];
-
   for (const shape of shapes) {
     for (const number of numbers) {
-      tiles.push(`${shape}${number}`); // 예: "cloud1"
+      tiles.push(`${shape}${number}`);
     }
   }
-
   return tiles;
 }
 

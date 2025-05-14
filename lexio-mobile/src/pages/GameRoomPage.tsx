@@ -82,7 +82,7 @@ function GameRoomPage() {
     await submitTiles(roomId, selectedTiles, playerId);
     await removeTilesFromHand(roomId, playerId, selectedTiles);
 
-    const myHandCount = players[playerId]?.hand.length ?? 0;
+    const myHandCount = players[playerId]?.hand?.length ?? 0;
     const isWinner = myHandCount - selectedTiles.length === 0;
 
     const remainingTiles = myTiles.filter((tile) => !selectedTiles.includes(tile));
