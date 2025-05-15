@@ -37,38 +37,44 @@ function LobbyPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-yellow-100 px-6">
-      <h1 className="text-3xl font-bold mb-8 text-center">🎲 렉시오 모바일</h1>
+    <div className="min-h-screen flex flex-col justify-between bg-yellow-100 px-6 py-8">
+      <div className="text-center">
+        <h1 className="text-3xl font-bold mb-8">🎲 렉시오 모바일</h1>
 
-      <input
-        type="text"
-        placeholder="닉네임을 입력하세요"
-        value={nickname}
-        onChange={(e) => setNickname(e.target.value)}
-        className="w-full max-w-xs mb-4 p-3 text-lg rounded-lg border border-gray-300"
-      />
+        <div className="flex flex-col items-center">
+          <input
+            type="text"
+            placeholder="닉네임을 입력하세요"
+            value={nickname}
+            onChange={(e) => setNickname(e.target.value)}
+            className="w-full max-w-md mb-4 p-3 text-lg rounded-lg border border-gray-300"
+          />
 
-      <input
-        type="text"
-        placeholder="방 코드 입력"
-        value={roomCode}
-        onChange={(e) => setRoomCode(e.target.value)}
-        className="w-full max-w-xs mb-4 p-3 text-lg rounded-lg border border-gray-300"
-      />
+          <input
+            type="text"
+            placeholder="방 코드 입력"
+            value={roomCode}
+            onChange={(e) => setRoomCode(e.target.value)}
+            className="w-full max-w-md mb-4 p-3 text-lg rounded-lg border border-gray-300"
+          />
 
-      <button
-        onClick={handleJoinRoom}
-        className="w-full max-w-xs bg-blue-500 text-white text-lg py-3 rounded-lg mb-2 hover:bg-blue-600"
-      >
-        입장하기
-      </button>
+          <button
+            onClick={handleJoinRoom}
+            className="w-full max-w-md bg-blue-500 text-white text-lg py-3 rounded-lg mb-2 hover:bg-blue-600"
+          >
+            입장하기
+          </button>
 
-      <button
-        onClick={handleCreateRoom}
-        className="w-full max-w-xs bg-green-500 text-white text-lg py-3 rounded-lg hover:bg-green-600"
-      >
-        새 방 만들기
-      </button>
+          <button
+            onClick={handleCreateRoom}
+            className="w-full max-w-md bg-green-500 text-white text-lg py-3 rounded-lg hover:bg-green-600"
+          >
+            새 방 만들기
+          </button>
+        </div>
+      </div>
+
+      <footer className="text-center text-sm text-gray-500 mt-8">© 2025 렉시오 모바일 - 친구들과 함께 즐기세요!</footer>
     </div>
   );
 }

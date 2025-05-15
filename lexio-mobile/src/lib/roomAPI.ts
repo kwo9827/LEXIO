@@ -2,6 +2,7 @@ import { ref, set, get, update, onValue } from "firebase/database";
 import { db } from "../firebase/firebase";
 import type { Unsubscribe } from "firebase/database";
 import { generateAllTiles, shuffleArray } from "../utils/tileSet";
+import { sortTilesByShapeAndNumber } from "../utils/sortTiles";
 
 export interface Player {
   nickname: string;
@@ -18,6 +19,16 @@ interface RoomData {
   turnStartAt?: number;
   passCount?: number;
   lastPlayedBy?: string;
+  subRoundEnded?: number;
+  settlementResult?: {
+    logs: string[];
+    winnerId: string;
+  };
+  passPlayers?: string[];
+}
+
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export async function createRoom(roomCode: string, nickname: string) {
@@ -95,45 +106,62 @@ export async function setNextTurn(
   isPass: boolean = false
 ) {
   const roomRef = ref(db, `rooms/${roomCode}`);
+
+  // ✅ 먼저 passPlayers 업데이트 (중간 반영)
+  if (isPass) {
+    const passRef = ref(db, `rooms/${roomCode}/passPlayers`);
+    const currentSnap = await get(passRef);
+    const currentPass = currentSnap.exists() ? currentSnap.val() : [];
+
+    const newPassPlayers = [...new Set([...currentPass, currentPlayerId])];
+    await update(roomRef, { passPlayers: newPassPlayers });
+
+    await delay(200);
+  }
+
+  // ✅ 이제 최신 상태 가져오기
   const roomSnap = await get(roomRef);
   const roomData = roomSnap.val();
 
   const lastPlayedBy = roomData.lastPlayedBy || null;
-  const passPlayers: string[] = roomData.passPlayers || [];
+  const passPlayers: string[] = Array.isArray(roomData.passPlayers) ? roomData.passPlayers : [];
 
-  const newPassPlayers = isPass ? [...new Set([...passPlayers, currentPlayerId])] : passPlayers;
-  const activePlayers = allPlayerIds.filter((id) => id !== lastPlayedBy && !newPassPlayers.includes(id));
+  const newPassPlayers = passPlayers;
 
-  let nextPlayerId = "";
-  let currentIndex = allPlayerIds.indexOf(currentPlayerId);
-  let tries = 0;
+  const validCandidates = allPlayerIds.filter((id) => id !== lastPlayedBy && !newPassPlayers.includes(id));
 
-  while (tries < allPlayerIds.length) {
-    currentIndex = (currentIndex + 1) % allPlayerIds.length;
-    const candidate = allPlayerIds[currentIndex];
-    if (!newPassPlayers.includes(candidate)) {
+  const currentIndex = allPlayerIds.indexOf(currentPlayerId);
+  let nextPlayerId: string | null = null;
+  const total = allPlayerIds.length;
+
+  for (let i = 1; i <= total; i++) {
+    const candidate = allPlayerIds[(currentIndex + i) % total];
+    if (validCandidates.includes(candidate)) {
       nextPlayerId = candidate;
       break;
     }
-    tries++;
   }
 
-  const isRoundEnd = nextPlayerId === lastPlayedBy || activePlayers.length === 0;
+  const isRoundEnd = nextPlayerId === null || validCandidates.length === 0;
 
   if (isRoundEnd) {
     await update(roomRef, {
       turn: lastPlayedBy,
       playedTiles: [],
-      passPlayers: [],
+      // passPlayers: [],
       turnStartAt: Date.now(),
+      subRoundEnded: Date.now(),
     });
   } else {
     await update(roomRef, {
       turn: nextPlayerId,
-      passPlayers: newPassPlayers,
+      passPlayers: newPassPlayers.length > 0 ? newPassPlayers : [],
       turnStartAt: Date.now(),
     });
   }
+
+  // ✅ 로그 추가
+  console.log("📢 최종 패스한 사람들:", newPassPlayers);
 }
 
 function filterTilesByPlayerCount(allTiles: string[], count: number): string[] {
@@ -155,7 +183,6 @@ function filterTilesByPlayerCount(allTiles: string[], count: number): string[] {
 export async function dealTiles(roomCode: string) {
   const roomRef = ref(db, `rooms/${roomCode}`);
   const snapshot = await get(roomRef);
-
   if (!snapshot.exists()) return;
 
   const roomData = snapshot.val();
@@ -163,10 +190,13 @@ export async function dealTiles(roomCode: string) {
   const playerIds = Object.keys(players);
   const playerCount = playerIds.length;
 
+  // 🎯 인원수에 따라 타일 필터링
   let allTiles = shuffleArray(generateAllTiles());
   allTiles = filterTilesByPlayerCount(allTiles, playerCount);
 
-  const TILE_PER_PLAYER = 12;
+  // 🎯 플레이어별 타일 개수
+  const TILE_PER_PLAYER = playerCount === 4 ? 13 : 12;
+
   if (playerCount * TILE_PER_PLAYER > allTiles.length) {
     console.error("타일이 부족합니다. 인원을 확인해주세요.");
     return;
@@ -179,14 +209,15 @@ export async function dealTiles(roomCode: string) {
     const start = index * TILE_PER_PLAYER;
     const end = start + TILE_PER_PLAYER;
     const hand = allTiles.slice(start, end);
+    const sortedHand = sortTilesByShapeAndNumber(hand); // ✅ 정렬
 
-    if (hand.includes("cloud3")) {
+    if (sortedHand.includes("cloud3")) {
       cloud3Owner = id;
     }
 
     updatedPlayers[id] = {
       ...players[id],
-      hand,
+      hand: sortedHand,
     };
   });
 
