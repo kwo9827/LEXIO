@@ -25,7 +25,7 @@
 </p> 
 
 <p align="center">
-  <span style="display:inline-block; width:45%; text-align:center;"><i>로비 화면</i></span>
+  <span style="display:inline-block; width:45%; text-align:center;"><i>로비 화면 / </i></span>
   <span style="display:inline-block; width:45%; text-align:center;"><i>게임 대기 화면</i></span>
 </p>
 
@@ -35,7 +35,7 @@
 </p> 
 
 <p align="center">
-  <span style="display:inline-block; width:45%; text-align:center;"><i>상대 패 개수 & 내 패 확인</i></span>
+  <span style="display:inline-block; width:45%; text-align:center;"><i>상대 패 개수 & 내 패 확인 / </i></span>
   <span style="display:inline-block; width:45%; text-align:center;"><i>타일 조합 추천 기능</i></span>
 </p>
 
@@ -45,7 +45,7 @@
 </p> 
 
 <p align="center">
-  <span style="display:inline-block; width:45%; text-align:center;"><i>상대가 낸 타일 확인</i></span>
+  <span style="display:inline-block; width:45%; text-align:center;"><i>상대가 낸 타일 확인 / </i></span>
   <span style="display:inline-block; width:45%; text-align:center;"><i>유효 조합만 제출 가능</i></span>
 </p>
 
@@ -56,7 +56,7 @@
 </p> 
 
 <p align="center">
-  <span style="display:inline-block; width:45%; text-align:center;"><i>상대가 낸 타일 조합과 일치하지 않으면 경고창</i></span>
+  <span style="display:inline-block; width:45%; text-align:center;"><i>상대가 낸 타일 조합과 일치하지 않으면 경고창 / </i></span>
   <span style="display:inline-block; width:45%; text-align:center;"><i>시간 내에 내지 못하면 자동으로 패스!</i></span>
 </p>
 
