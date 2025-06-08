@@ -19,17 +19,7 @@
 ## 🖼️ 데모
 
 > 📸
-![렉시오2](https://github.com/user-attachments/assets/7bcc32e9-1974-42d1-9a91-02f6fa990b6d)
-![렉시오3](https://github.com/user-attachments/assets/bbc7b13b-fad2-46c7-93d3-5da6ba003600)
-![렉시오4](https://github.com/user-attachments/assets/47eb7c24-79d7-451c-b88d-155cfd5c6dad)
-![렉시오5](https://github.com/user-attachments/assets/cb9420ae-3235-4658-a74a-3320d62072af)
-![렉시오6](https://github.com/user-attachments/assets/1b393ce1-05cf-4287-b539-1273e23c6db0)
-![렉시오7](https://github.com/user-attachments/assets/9b290ec5-30ee-4bef-95e7-7849712bfdd5)
-![렉시오8](https://github.com/user-attachments/assets/f687111e-a69b-4898-ad0c-e6e0b4d8aaa3)
-![렉시오9](https://github.com/user-attachments/assets/54835735-1dcb-4fff-a653-df24aaf4a68d)
-![렉시오10](https://github.com/user-attachments/assets/035dc617-731c-4932-9b25-be003e2ea7a6)
-
-
+<p align="center"> <img src="https://github.com/user-attachments/assets/7bcc32e9-1974-42d1-9a91-02f6fa990b6d" width="45%" /> <img src="https://github.com/user-attachments/assets/bbc7b13b-fad2-46c7-93d3-5da6ba003600" width="45%" /> </p> <p align="center"> <img src="https://github.com/user-attachments/assets/47eb7c24-79d7-451c-b88d-155cfd5c6dad" width="45%" /> <img src="https://github.com/user-attachments/assets/cb9420ae-3235-4658-a74a-3320d62072af" width="45%" /> </p> <p align="center"> <img src="https://github.com/user-attachments/assets/1b393ce1-05cf-4287-b539-1273e23c6db0" width="45%" /> <img src="https://github.com/user-attachments/assets/54835735-1dcb-4fff-a653-df24aaf4a68d" width="45%" /> </p> <p align="center"> <img src="https://github.com/user-attachments/assets/9b290ec5-30ee-4bef-95e7-7849712bfdd5" width="45%" /> <img src="https://github.com/user-attachments/assets/f687111e-a69b-4898-ad0c-e6e0b4d8aaa3" width="45%" /> </p> <p align="center"> <img src="https://github.com/user-attachments/assets/035dc617-731c-4932-9b25-be003e2ea7a6" width="45%" /> </p>
 ---
 
 ## 🔧 기술 스택
@@ -40,7 +30,7 @@
 | Backend     | Firebase Realtime Database                         |
 | State Mgmt  | Zustand, React Query                               |
 | Animation   | Framer Motion, Tailwind Transition                 |
-| Deployment  | Vercel                                              |
+| Deployment  | Firebase Hosting                                   |
 
 ---
 
