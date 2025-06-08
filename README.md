@@ -24,31 +24,42 @@
   <img src="https://github.com/user-attachments/assets/bbc7b13b-fad2-46c7-93d3-5da6ba003600" width="45%" /> 
 </p> 
 
+<br/>
+
 <p align="center">
   <span style="display:inline-block; width:45%; text-align:center;"><i>로비 화면 / </i></span>
   <span style="display:inline-block; width:45%; text-align:center;"><i>게임 대기 화면</i></span>
 </p>
+
+<br/>
 
 <p align="center"> 
   <img src="https://github.com/user-attachments/assets/47eb7c24-79d7-451c-b88d-155cfd5c6dad" width="45%" /> 
   <img src="https://github.com/user-attachments/assets/cb9420ae-3235-4658-a74a-3320d62072af" width="45%" /> 
 </p> 
 
+<br/>
+
 <p align="center">
   <span style="display:inline-block; width:45%; text-align:center;"><i>상대 패 개수 & 내 패 확인 / </i></span>
   <span style="display:inline-block; width:45%; text-align:center;"><i>타일 조합 추천 기능</i></span>
 </p>
+
+<br/>
 
 <p align="center"> 
   <img src="https://github.com/user-attachments/assets/1b393ce1-05cf-4287-b539-1273e23c6db0" width="45%" />
   <img src="https://github.com/user-attachments/assets/54835735-1dcb-4fff-a653-df24aaf4a68d" width="45%" /> 
 </p> 
 
+<br/>
+
 <p align="center">
   <span style="display:inline-block; width:45%; text-align:center;"><i>상대가 낸 타일 확인 / </i></span>
   <span style="display:inline-block; width:45%; text-align:center;"><i>유효 조합만 제출 가능</i></span>
 </p>
 
+<br/>
 
 <p align="center"> 
   <img src="https://github.com/user-attachments/assets/9b290ec5-30ee-4bef-95e7-7849712bfdd5" width="45%" />
@@ -60,9 +71,13 @@
   <span style="display:inline-block; width:45%; text-align:center;"><i>시간 내에 내지 못하면 자동으로 패스!</i></span>
 </p>
 
+<br/>
+
 <p align="center"> 
   <img src="https://github.com/user-attachments/assets/035dc617-731c-4932-9b25-be003e2ea7a6" width="45%" /> 
 </p>
+
+<br/>
 
 <p align="center">
   <i>라운드 종료 시 남아 있는 타일 갯수 확인 후 정산</i>
